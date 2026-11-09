@@ -1450,3 +1450,77 @@ h2,
     font-size: 8px;
   }
 }
+/* Match the original HTML's display/body type roles, including navigation. */
+.tab,
+.tab small,
+.eyebrow,
+.item-owned,
+.floater,
+.subheading {
+  font-family: Unbounded, system-ui, sans-serif;
+}
+.tab {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tab small {
+  font-size: clamp(7px, 0.65vw, 10px);
+  line-height: 1.5;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.section-heading h2,
+.subheading {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+.item-owned {
+  font-size: 0.8em;
+  color: var(--gold-hi);
+  margin-left: 4px;
+}
+.floater {
+  font-weight: 700;
+}
+h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 3px 0 #7a4a12,
+    0 8px 24px #0008;
+}
+.brand p {
+  font-style: italic;
+}
+@media (max-width: 850px) {
+  .tab small {
+    font-size: 7px;
+    letter-spacing: 0;
+  }
+  .tabs {
+    min-height: 64px;
+  }
+  .workshop {
+    padding-bottom: 64px;
+  }
+  .section-heading h2 {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+}
+.segments button {
+  font-weight: 800;
+}
+.rates {
+  font-weight: 700;
+}
+@media (max-width: 850px) {
+  .tab small {
+    font-size: clamp(5px, 1.5vw, 8px);
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+}

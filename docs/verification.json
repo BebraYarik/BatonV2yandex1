@@ -1,6 +1,6 @@
 {
   "version": "1.0.1",
-  "checkedAtUtc": "2026-11-09T13:19:04.061861+00:00",
+  "checkedAtUtc": "2026-11-09T15:19:14.817635+00:00",
   "unitAndContractTests": {
     "passed": 35,
     "failed": 0
@@ -26,7 +26,7 @@
     ],
     "uncaughtErrors": []
   },
-  "releaseSha256": "d588932addad020f603e56b234df85d652b91f87b56fc5841750d8a12191095e",
+  "releaseSha256": "826760c70031ebee361cd7e06f57639dcb2d43ac86d2b6f41f95c1778f1fecfc",
   "notPerformed": [
     "Live Yandex SDK/debug panel/cloud/ads in owner account",
     "Physical Android/iOS, Safari, Firefox and Yandex Browser",
@@ -49,6 +49,15 @@
     "croissantLevitation": true,
     "stableHitArea": true,
     "pause": true,
-    "reducedMotion": true
+    "reducedMotion": true,
+    "typographyRolesVerified": [
+      "h1",
+      "#balance",
+      ".balance-label",
+      ".tab small",
+      ".section-heading h2",
+      ".item-owned",
+      ".item-name (Nunito)"
+    ]
   }
 }

@@ -113,7 +113,10 @@ try {
     await page.click("#settings");
     await page.selectOption("#language", "en");
     assert.equal(await page.title(), "Baton: Bread Empire");
-    assert.match(await page.locator("#dialog-body").innerText(), /How to play/);
+    assert.match(
+      await page.locator("#dialog-body").innerText(),
+      /How to play/i,
+    );
     await page.selectOption("#language", "ru");
     await page.click("#dialog-close");
   });

@@ -28,6 +28,37 @@ try {
     await page.locator("h1").evaluate((el) => getComputedStyle(el).fontFamily),
     /Unbounded/,
   );
+  for (const selector of [
+    "h1",
+    "#balance",
+    ".balance-label",
+    ".tab small",
+    ".section-heading h2",
+    ".item-owned",
+  ]) {
+    assert.match(
+      await page
+        .locator(selector)
+        .first()
+        .evaluate((el) => getComputedStyle(el).fontFamily),
+      /Unbounded/,
+      selector,
+    );
+  }
+  assert.equal(
+    await page
+      .locator(".tab small")
+      .first()
+      .evaluate((el) => getComputedStyle(el).textTransform),
+    "uppercase",
+  );
+  assert.match(
+    await page
+      .locator(".item-name")
+      .first()
+      .evaluate((el) => getComputedStyle(el).fontFamily),
+    /Nunito/,
+  );
   await page.evaluate(() => (document.getElementById("golden").hidden = false));
   const box = await page.locator("#golden").boundingBox(),
     before = await page

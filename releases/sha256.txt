@@ -1,1 +1,1 @@
-d588932addad020f603e56b234df85d652b91f87b56fc5841750d8a12191095e  baton-yandex-release.zip
+826760c70031ebee361cd7e06f57639dcb2d43ac86d2b6f41f95c1778f1fecfc  baton-yandex-release.zip
