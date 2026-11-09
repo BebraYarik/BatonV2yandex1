@@ -1,0 +1,14 @@
+import { mkdirSync, writeFileSync } from "node:fs";
+import { Game } from "../js/economy.js";
+import { encode } from "../js/state.js";
+const game = new Game();
+game.gain(4e6);
+game.s.run.buildings.spoon = 40;
+game.s.run.buildings.grandma = 25;
+game.s.run.buildings.oven = 12;
+game.s.run.upgrades = ["maslo", "crisp", "sourdough", "family"];
+game.s.settings.lang = "ru";
+game.check();
+mkdirSync("tests/fixtures", { recursive: true });
+writeFileSync("tests/fixtures/prestige-save.json", encode(game.s) + "\n");
+console.log("Wrote QA-only prestige fixture. Never included in release ZIP.");

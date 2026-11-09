@@ -1,0 +1,54 @@
+{
+  "version": "1.0.1",
+  "checkedAtUtc": "2026-11-09T13:19:04.061861+00:00",
+  "unitAndContractTests": {
+    "passed": 35,
+    "failed": 0
+  },
+  "releaseBrowser": {
+    "engine": "system Chromium",
+    "target": "unpacked release ZIP",
+    "scenarios": [
+      "mouse, Enter and Space each grant one loaf",
+      "first purchase and reload retain building",
+      "1000 rapid clicks keep finite state and bounded particle DOM",
+      "all five sections and both locales render",
+      "prestige confirms, resets only run data and persists on immediate reload",
+      "permanent purchase and new run starter persist",
+      "order claim is single use across reload",
+      "delete requires two confirmations and removes both save copies",
+      "offline income is paid once across repeated reloads",
+      "desktop/mobile/landscape viewport matrix has no outer scroll or clipped navigation",
+      "touch action grants one click on mobile",
+      "pause blocks input and production and resume restores gameplay",
+      "SDK auto locale, ready, gameplay, cloud and rewarded callbacks",
+      "no uncaught JavaScript errors"
+    ],
+    "uncaughtErrors": []
+  },
+  "releaseSha256": "d588932addad020f603e56b234df85d652b91f87b56fc5841750d8a12191095e",
+  "notPerformed": [
+    "Live Yandex SDK/debug panel/cloud/ads in owner account",
+    "Physical Android/iOS, Safari, Firefox and Yandex Browser",
+    "Real-time 30-minute user playtest",
+    "Yandex moderation/publication"
+  ],
+  "previousBaselineLongRun": {
+    "events": [
+      "gost",
+      "queue",
+      "rain",
+      "grandma"
+    ],
+    "simulatedMinutes": 30,
+    "uncaughtErrors": []
+  },
+  "visual": {
+    "localFonts": true,
+    "zeroExternalFontRequests": true,
+    "croissantLevitation": true,
+    "stableHitArea": true,
+    "pause": true,
+    "reducedMotion": true
+  }
+}

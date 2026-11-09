@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Батон-Кликер 🥖</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🥖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#1d0f06; --panel:#3a2210; --panel2:#2c1808;
+  --line:#5c3a1a; --line-hi:#8a5a24;
+  --gold:#f5b83d; --gold-hi:#ffd97a;
+  --cream:#f8ead0; --dim:#c8a274; --jam:#e4573d;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{color-scheme:dark}
+::selection{background:var(--gold);color:#3a2008}
+body{
+  font-family:'Nunito',system-ui,sans-serif;color:var(--cream);min-height:100vh;overflow-x:hidden;
+  background:
+    radial-gradient(1100px 700px at 18% 8%, rgba(255,180,70,.14), transparent 60%),
+    radial-gradient(900px 600px at 88% 92%, rgba(228,87,61,.10), transparent 60%),
+    radial-gradient(ellipse at 50% 40%, #3b2110, #1d0f06 78%);
+  background-attachment:fixed;
+}
+.fl{position:fixed;bottom:-14px;border-radius:50%;background:rgba(255,240,215,.45);filter:blur(1px);pointer-events:none;z-index:1;animation:flUp linear infinite}
+@keyframes flUp{
+  0%{transform:translate(0,0);opacity:.55}
+  25%{transform:translate(var(--sw),-30vh)}
+  50%{transform:translate(calc(var(--sw)*-1),-60vh)}
+  75%{transform:translate(var(--sw),-85vh)}
+  100%{transform:translate(0,-115vh);opacity:0}
+}
+header{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:18px 20px 6px;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.logo{font-family:'Unbounded';font-weight:900;font-size:clamp(1.4rem,3.4vw,2.1rem);letter-spacing:.04em;color:var(--gold-hi);text-shadow:0 3px 0 #7a4a12,0 8px 24px rgba(0,0,0,.5)}
+.logo .bob{display:inline-block;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-6px) rotate(6deg)}}
+.tagline{color:var(--dim);font-size:.9rem;font-style:italic;margin-top:2px}
+.hchips{display:flex;gap:8px;align-items:center}
+.pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.86rem;color:var(--dim)}
+.pill b{color:var(--gold-hi)}
+button.pill{cursor:pointer;transition:.15s;color:var(--cream)}
+button.pill:hover{border-color:var(--gold);transform:translateY(-1px)}
+#saveDot{opacity:.25;transition:opacity .4s;border:none;background:none;font-size:1rem}
+#saveDot.on{opacity:1}
+main{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:14px 20px 40px;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:18px;align-items:start}
+.panel{background:linear-gradient(170deg,#422711,#2c1808 80%);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,220,150,.08)}
+#left{padding:22px;display:flex;flex-direction:column;align-items:center;user-select:none}
+#cnt{font-family:'Unbounded';font-weight:900;font-size:clamp(2rem,5vw,3.2rem);color:var(--cream);text-shadow:0 4px 18px rgba(0,0,0,.5);line-height:1.1}
+.lbl{font-family:'Unbounded';font-weight:700;font-size:.72rem;letter-spacing:.42em;color:var(--gold);margin-bottom:4px}
+#rateLine{color:var(--dim);font-weight:700;margin-top:6px}
+#buffs{min-height:32px;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.chip{display:inline-flex;gap:6px;align-items:center;background:#4a2c12;border:1px solid var(--gold);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.85rem;color:var(--gold-hi);animation:chipIn .3s ease}
+.chip b{color:#fff}
+@keyframes chipIn{from{transform:scale(.6);opacity:0}}
+#batonZone{position:relative;width:100%;height:380px;display:flex;align-items:center;justify-content:center;margin-top:6px}
+.rays{position:absolute;left:50%;top:50%;width:600px;height:600px;border-radius:50%;
+  background:repeating-conic-gradient(rgba(255,200,90,.15) 0deg 6deg, transparent 6deg 15deg);
+  -webkit-mask-image:radial-gradient(circle,#000 0 38%,transparent 66%);mask-image:radial-gradient(circle,#000 0 38%,transparent 66%);
+  animation:spin 70s linear infinite;pointer-events:none}
+@keyframes spin{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.baton-wrap{position:relative;z-index:3;animation:idle 4.5s ease-in-out infinite}
+@keyframes idle{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1.2deg)}}
+#baton{background:none;border:0;cursor:pointer;width:min(76vw,400px);display:block;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(0 22px 26px rgba(0,0,0,.5));transition:transform .15s}
+#baton:hover{transform:scale(1.035)}
+#baton.squish{animation:squish .17s ease}
+@keyframes squish{0%{transform:scale(1)}35%{transform:scale(1.09,.87)}70%{transform:scale(.96,1.05)}100%{transform:scale(1)}}
+.steam{position:absolute;top:6%;width:14px;height:14px;border-radius:50%;background:rgba(255,242,214,.55);filter:blur(5px);opacity:0;pointer-events:none}
+.bps-on .steam{animation:steam 3s ease-in-out infinite}
+.bps-on .s2{animation-delay:1s}.bps-on .s3{animation-delay:2s}
+@keyframes steam{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:.7}100%{transform:translateY(-70px) scale(1.6);opacity:0}}
+.crumb{position:absolute;width:7px;height:7px;border-radius:2px;pointer-events:none;z-index:4}
+.floater{position:fixed;z-index:80;font-family:'Unbounded';font-weight:700;font-size:1.05rem;color:var(--gold-hi);text-shadow:0 2px 10px rgba(0,0,0,.6);pointer-events:none;transform:translate(-50%,-50%)}
+#news{margin-top:14px;border-top:1px dashed var(--line-hi);padding-top:12px;width:100%;text-align:center;color:var(--dim);font-style:italic;font-size:.92rem;transition:opacity .4s;min-height:2.4em}
+/* ── правая панель ── */
+#right{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:13px 8px;background:none;border:0;font-family:'Unbounded';font-weight:700;font-size:.82rem;letter-spacing:.06em;color:var(--dim);cursor:pointer;transition:.15s}
+.tab.active{background:var(--gold);color:#3a2008}
+.tab:not(.active):hover{color:var(--gold-hi)}
+.shopHead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 4px}
+.shopHead h3{font-family:'Unbounded';font-size:.72rem;letter-spacing:.25em;color:var(--gold)}
+.seg{display:flex;gap:4px}
+.seg button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:3px 10px;font-weight:800;font-size:.8rem;cursor:pointer}
+.seg button.active{background:var(--gold);color:#3a2008;border-color:var(--gold)}
+.pane{overflow-y:auto;max-height:calc(100vh - 300px);min-height:300px;padding:8px 14px 14px}
+.pane::-webkit-scrollbar{width:9px}
+.pane::-webkit-scrollbar-thumb{background:var(--line-hi);border-radius:9px}
+.hidden{display:none!important}
+.item{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:10px 12px;margin-bottom:8px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(#402711,#331d0b);cursor:pointer;transition:transform .12s,border-color .15s,opacity .2s;touch-action:manipulation}
+.item:hover{transform:translateX(4px)}
+.item.can{border-color:#d99a2b;box-shadow:0 0 14px rgba(245,184,61,.16)}
+.item:not(.can){opacity:.55;cursor:default}
+.item .icon{font-size:28px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#241204;border-radius:10px;border:1px solid var(--line)}
+.item .name{font-weight:800;font-size:.98rem}
+.item .cnt{color:var(--gold-hi);font-family:'Unbounded';font-size:.78rem;margin-left:6px}
+.item .desc{color:var(--dim);font-size:.8rem;margin-top:1px}
+.item .cost{text-align:right;font-weight:800;color:var(--gold-hi);white-space:nowrap}
+.item:not(.can) .cost{color:#b06a4a}
+.item.mystery{opacity:.5;cursor:default;filter:grayscale(.6)}
+#upGrid{display:grid;grid-template-columns:repeat(auto-fill,62px);gap:10px;justify-content:center;padding-top:6px}
+.tile{width:62px;height:62px;font-size:30px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#4a2c12,#331d0a);border:1px solid var(--line);border-radius:12px;cursor:pointer;opacity:.55;transition:.15s}
+.tile.can{opacity:1;border-color:#d99a2b;box-shadow:0 0 12px rgba(245,184,61,.3)}
+.tile.can:hover{transform:translateY(-3px) scale(1.07)}
+.empty{grid-column:1/-1;text-align:center;color:var(--dim);font-style:italic;padding:26px 10px;font-size:.9rem}
+.upFoot{padding:8px 16px;color:var(--dim);font-size:.82rem;border-top:1px dashed var(--line)}
+.upFoot b{color:var(--gold-hi)}
+.stats{padding:12px 16px;border-top:1px solid var(--line);font-size:.85rem}
+.stats div{display:flex;justify-content:space-between;padding:3px 0;color:var(--dim)}
+.stats b{color:var(--cream)}
+.btns{display:flex;gap:8px;padding:0 16px 16px;flex-wrap:wrap}
+.btn{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--cream);border-radius:10px;padding:9px 6px;font-weight:800;font-size:.84rem;cursor:pointer;transition:.15s;font-family:inherit}
+.btn:hover{border-color:var(--gold);transform:translateY(-1px)}
+.btn.danger{color:#ffb0a0;border-color:#7a3526}
+.btn.danger:hover{border-color:var(--jam)}
+/* ── золотая плюшка ── */
+.golden{position:fixed;z-index:90;font-size:46px;background:none;border:0;cursor:pointer;line-height:1;filter:drop-shadow(0 0 16px rgba(255,210,90,.95));animation:gfloat 1.6s ease-in-out infinite alternate}
+@keyframes gfloat{from{transform:translateY(-6px) scale(1) rotate(-7deg)}to{transform:translateY(8px) scale(1.13) rotate(8deg)}}
+.spark{position:fixed;z-index:91;pointer-events:none;font-size:16px}
+/* ── тосты и тултип ── */
+#toasts{position:fixed;left:18px;bottom:18px;z-index:100;display:flex;flex-direction:column-reverse;gap:10px;max-width:330px}
+.toast{display:flex;gap:12px;align-items:center;background:#241204;border:1px solid var(--line-hi);border-radius:12px;padding:11px 15px;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:tIn .35s cubic-bezier(.2,.9,.3,1.2)}
+.toast.ach{border-color:var(--gold);box-shadow:0 0 22px rgba(245,184,61,.3)}
+.toast .ti{font-size:26px}
+.toast .tt{font-weight:800;font-size:.92rem}
+.toast .td{color:var(--dim);font-size:.8rem}
+.toast.out{animation:tOut .4s forwards}
+@keyframes tIn{from{transform:translateX(-120%);opacity:0}}
+@keyframes tOut{to{transform:translateX(-120%);opacity:0}}
+#tooltip{position:fixed;z-index:120;max-width:270px;background:#20100a;border:1px solid var(--line-hi);border-radius:10px;padding:10px 13px;font-size:.84rem;line-height:1.45;pointer-events:none;opacity:0;transition:opacity .12s;box-shadow:0 10px 26px rgba(0,0,0,.55)}
+#tooltip.on{opacity:1}
+#tooltip b{color:var(--gold-hi)}
+#tooltip i{color:var(--dim)}
+@media (max-width:920px){
+  main{grid-template-columns:1fr}
+  #batonZone{height:310px}
+  .pane{max-height:430px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo"><span class="bob">🥖</span> БАТОН-КЛИКЕР</div>
+    <div class="tagline">пеки · кликай · правь хлебобулочной империей</div>
+  </div>
+  <div class="hchips">
+    <span class="pill">🏆 <b id="achCnt">0</b>/<span id="achTot">0</span></span>
+    <button class="pill" id="sndBtn" title="Звук">🔊</button>
+    <span class="pill" id="saveDot">💾</span>
+  </div>
+</header>
+
+<main>
+  <section id="left" class="panel">
+    <div class="lbl">БАТОНОВ</div>
+    <div id="cnt">0</div>
+    <div id="rateLine">🧈 0 в секунду · 👆 1 за клик</div>
+    <div id="buffs"></div>
+    <div id="batonZone">
+      <div class="rays"></div>
+      <span class="steam s1" style="left:38%"></span>
+      <span class="steam s2" style="left:50%"></span>
+      <span class="steam s3" style="left:61%"></span>
+      <div class="baton-wrap">
+        <button id="baton" type="button" aria-label="Кликнуть батон">
+          <svg viewBox="0 0 320 170">
+            <defs>
+              <radialGradient id="crust" cx="50%" cy="32%" r="85%">
+                <stop offset="0%" stop-color="#ffdf9a"/>
+                <stop offset="45%" stop-color="#eaa63e"/>
+                <stop offset="100%" stop-color="#b06a1d"/>
+              </radialGradient>
+            </defs>
+            <path d="M18,85 C20,40 80,16 160,16 C240,16 300,40 302,85 C300,122 240,150 160,150 C80,150 20,122 18,85 Z" fill="url(#crust)" stroke="#8a5215" stroke-width="3"/>
+            <ellipse cx="160" cy="46" rx="108" ry="17" fill="#ffe9b3" opacity=".38"/>
+            <g stroke="#7a4a12" stroke-width="9" stroke-linecap="round">
+              <path d="M78,44 Q92,68 102,98"/><path d="M118,38 Q132,64 142,96"/>
+              <path d="M158,36 Q172,62 182,95"/><path d="M198,38 Q212,64 222,96"/>
+              <path d="M238,44 Q250,66 258,92"/>
+            </g>
+            <g stroke="#f9dba4" stroke-width="2.5" stroke-linecap="round" opacity=".85">
+              <path d="M72,46 Q86,70 96,100"/><path d="M112,40 Q126,66 136,98"/>
+              <path d="M152,38 Q166,64 176,97"/><path d="M192,40 Q206,66 216,98"/>
+              <path d="M232,46 Q244,68 252,94"/>
+            </g>
+            <circle cx="122" cy="118" r="2.6" fill="#8a5215" opacity=".4"/>
+            <circle cx="182" cy="124" r="2.6" fill="#8a5215" opacity=".4"/>
+            <circle cx="232" cy="110" r="2.6" fill="#8a5215" opacity=".4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="news">Свежие батоны только из печи — кликай, пока горячие!</div>
+  </section>
+
+  <aside id="right" class="panel">
+    <div class="tabs">
+      <button class="tab active" data-p="prod">🏭 ПРОИЗВОДСТВО</button>
+      <button class="tab" data-p="ups">✨ ПЛЮШКИ</button>
+    </div>
+
+    <div id="paneProd">
+      <div class="shopHead">
+        <h3>ПЕКАРНИ И АГРЕГАТЫ</h3>
+        <div class="seg">
+          <button data-amt="1" class="active">×1</button>
+          <button data-amt="10">×10</button>
+        </div>
+      </div>
+      <div class="pane" id="shopList"></div>
+    </div>
+
+    <div id="paneUps" class="hidden">
+      <div class="shopHead"><h3>ВСЯКИЕ ВКУСНОСТИ</h3></div>
+      <div class="pane"><div id="upGrid"></div></div>
+      <div class="upFoot">Куплено плюшек: <b id="upOwned">0</b></div>
+    </div>
+
+    <div class="stats">
+      <div><span>Всего испечено</span><b id="stTotal">0</b></div>
+      <div><span>Кликов по батону</span><b id="stClicks">0</b></div>
+      <div><span>Поймано плюшек</span><b id="stGold">0</b></div>
+    </div>
+    <div class="btns">
+      <button class="btn" id="saveBtn">💾 Сохранить</button>
+      <button class="btn danger" id="wipeBtn">🗑️ Сброс</button>
+    </div>
+  </aside>
+</main>
+
+<div id="toasts"></div>
+<div id="tooltip"></div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const KEY='batonKlickerV1', R=1.15;
+
+/* ─────────── ДАННЫЕ ─────────── */
+const BUILDINGS=[
+ {icon:'🥄',name:'Деревянная ложка',flavor:'Бабушкина ложка месит тесто день и ночь.',cost:15,prod:0.1},
+ {icon:'👵',name:'Бабушка',flavor:'Бабушка печёт батоны с любовью и ворчанием.',cost:100,prod:1},
+ {icon:'🔥',name:'Русская печь',flavor:'Дрова трещат, корочка получается песней.',cost:1100,prod:8},
+ {icon:'🏪',name:'Киоск с батонами',flavor:'Очередь стоит с 1987 года и не жалуется.',cost:12000,prod:47},
+ {icon:'🌾',name:'Поле пшеницы',flavor:'Золотой океан будущих батонов.',cost:130000,prod:260},
+ {icon:'🏭',name:'Хлебозавод',flavor:'Конвейер не останавливается ни на минуту.',cost:1.4e6,prod:1400},
+ {icon:'🚂',name:'Хлебный поезд',flavor:'Везёт свежие батоны по всей стране.',cost:2e7,prod:7800},
+ {icon:'🚀',name:'Батонолёт',flavor:'Сбрасывает батоны прямо с неба. Тёплыми.',cost:3.3e8,prod:44000},
+ {icon:'🌀',name:'Хлебный портал',flavor:'Батоны поступают из измерения вечной выпечки.',cost:5.1e9,prod:260000},
+ {icon:'🌌',name:'Космо-каравай',flavor:'Орбитальная пекарня кормит всю галактику.',cost:7.5e10,prod:1.6e6}
+];
+const UPGRADES=[
+ {id:'maslo', icon:'🧈',name:'Сливочное масло',desc:'Клик ×2 — батон сам скользит в руки.',cost:400,type:'click',val:2,need:s=>s.clicks>=25},
+ {id:'sezam', icon:'✨',name:'Кунжут',desc:'Клик ×2. Кунжут хрустит, продажи растут.',cost:3500,type:'click',val:2,need:s=>s.total>=1500},
+ {id:'gost',  icon:'📜',name:'Рецепт по ГОСТу',desc:'Всё производство +50%.',cost:12000,type:'global',val:1.5,need:s=>s.total>=6000},
+ {id:'sgush', icon:'🥛',name:'Сгущёнка',desc:'Клик ×2. Сладко до хруста.',cost:35000,type:'click',val:2,need:s=>s.total>=15000},
+ {id:'med',   icon:'🍯',name:'Медовая корочка',desc:'Клик ×2. Пчёлы одобряют.',cost:4e5,type:'click',val:2,need:s=>s.total>=1.5e5},
+ {id:'magnit',icon:'🧲',name:'Магнитная корочка',desc:'Золотые плюшки прилетают в 2 раза чаще.',cost:6e5,type:'golden',val:2,need:s=>s.golden>=1},
+ {id:'krosh', icon:'🍀',name:'Крошка удачи',desc:'Каждый клик даёт ещё +2% от производства в секунду.',cost:1e6,type:'percent',val:0.02,need:s=>s.total>=3e5},
+ {id:'sekret',icon:'🧶',name:'Бабушкин секрет',desc:'Всё производство ×2. Хранится в платочке.',cost:1.2e6,type:'global',val:2,need:s=>s.total>=5e5},
+ {id:'ikra',  icon:'🐟',name:'Икорка на батоне',desc:'Клик ×2. Для очень важных перекусов.',cost:6e6,type:'click',val:2,need:s=>s.total>=2e6},
+ {id:'zlat',  icon:'🌟',name:'Золотая мука',desc:'Всё производство ×2.',cost:1.5e8,type:'global',val:2,need:s=>s.total>=5e7},
+ {id:'drozh', icon:'🪐',name:'Дрожжи с орбиты',desc:'Всё производство ×2. Тесто растёт до стратосферы.',cost:2e10,type:'global',val:2,need:s=>s.total>=6e9}
+];
+const ACHS=[
+ {id:'a1',icon:'🍞',name:'Первый батон',desc:'Испечь 1 батон.',test:()=>S.total>=1},
+ {id:'a2',icon:'🧺',name:'Полная корзина',desc:'Испечь 100 батонов.',test:()=>S.total>=100},
+ {id:'a3',icon:'🚚',name:'Оптовая партия',desc:'Испечь 1 000 батонов.',test:()=>S.total>=1e3},
+ {id:'a4',icon:'🏆',name:'Хлебный магнат',desc:'Испечь 100 000 батонов.',test:()=>S.total>=1e5},
+ {id:'a5',icon:'👑',name:'Король батонов',desc:'Испечь 10 000 000 батонов.',test:()=>S.total>=1e7},
+ {id:'a6',icon:'🌌',name:'Хлебная сингулярность',desc:'Испечь 1 000 000 000 батонов.',test:()=>S.total>=1e9},
+ {id:'a7',icon:'👆',name:'Разминка',desc:'25 кликов по батону.',test:()=>S.clicks>=25},
+ {id:'a8',icon:'💪',name:'Выдержка',desc:'500 кликов по батону.',test:()=>S.clicks>=500},
+ {id:'a9',icon:'🦾',name:'Стальной палец',desc:'5 000 кликов по батону.',test:()=>S.clicks>=5000},
+ {id:'a10',icon:'🏠',name:'Первый помощник',desc:'Купить первое производство.',test:()=>S.counts.some(c=>c>0)},
+ {id:'a11',icon:'🏗️',name:'Производственная линия',desc:'100 единиц производства.',test:()=>S.counts.reduce((a,b)=>a+b,0)>=100},
+ {id:'a12',icon:'🥐',name:'Ловец плюшек',desc:'Поймать золотую плюшку.',test:()=>S.golden>=1},
+ {id:'a13',icon:'⚡',name:'Конвейер',desc:'Достичь 100 батонов/сек.',test:()=>bps()>=100},
+ {id:'a14',icon:'🚀',name:'Полный ход',desc:'Достичь 10 000 батонов/сек.',test:()=>bps()>=1e4},
+ {id:'a15',icon:'🧈',name:'Масляная жизнь',desc:'Купить 5 плюшек-улучшений.',test:()=>S.ups.length>=5}
+];
+const NEWS=[
+ 'Срочно: горячие батоны сметают с полок!',
+ 'Бабушкино тесто официально признано ГОСТом.',
+ 'Учёные доказали: батон с маслом вкуснее на 200%.',
+ 'Очередь за свежим батоном растянулась до горизонта.',
+ 'Над городом замечен подозрительно золотой круассан.',
+ 'Пшеничные поля сообщают об урожае века.',
+ 'Профсоюз пекарей объявил батон королём выпечки.',
+ 'Слух: внутри батона найдено озерцо сгущёнки.',
+ 'Фермеры требуют кружку молока к каждому батону.',
+ 'Батонолёт совершил первый рейс. Очевидцы в восторге.',
+ 'Кунжут подорожал: аналитики винят пекарей.',
+ 'Крошка, брошенная через плечо, проросла батоном.'
+];
+
+/* ─────────── СОСТОЯНИЕ ─────────── */
+function fresh(){return{butter:0,total:0,clicks:0,golden:0,counts:new Array(BUILDINGS.length).fill(0),ups:[],ach:[],sound:true,buyAmt:1,last:Date.now()};}
+let S=fresh();
+try{
+  const d=JSON.parse(localStorage.getItem(KEY));
+  if(d&&typeof d==='object'){S={...fresh(),...d};
+    if(!Array.isArray(S.counts)||S.counts.length!==BUILDINGS.length)S.counts=new Array(BUILDINGS.length).fill(0);}
+}catch(e){}
+
+let baseBps=0,clickBase=1,clickPct=0,goldenFreq=1,globalMult=1;
+const buffs={frenzy:0,click:0};
+function recompute(){
+  let g=1,c=1,p=0,f=1;
+  for(const id of S.ups){const u=UPGRADES.find(x=>x.id===id);if(!u)continue;
+    if(u.type==='global')g*=u.val;else if(u.type==='click')c*=u.val;
+    else if(u.type==='percent')p+=u.val;else if(u.type==='golden')f*=u.val;}
+  globalMult=g;clickBase=c;clickPct=p;goldenFreq=f;
+  baseBps=BUILDINGS.reduce((a,b,i)=>a+b.prod*S.counts[i],0)*g;
+}
+const bps=()=>baseBps*(Date.now()<buffs.frenzy?7:1);
+const clickPower=()=>(clickBase+clickPct*bps())*(Date.now()<buffs.click?15:1);
+const bulkCost=(i,n)=>Math.ceil(BUILDINGS[i].cost*Math.pow(R,S.counts[i])*(Math.pow(R,n)-1)/(R-1));
+const revealed=(i)=>i===0||S.counts[i]>0||S.total>=BUILDINGS[i].cost*0.3;
+
+function fmt(n){
+  if(!isFinite(n))return'∞';
+  if(n<1000)return n%1>0.05&&n<100?(Math.round(n*10)/10).toString().replace('.',','):String(Math.floor(n));
+  const U=['тыс.','млн','млрд','трлн','квадр.'];let i=-1;
+  while(n>=1000&&i<U.length-1){n/=1000;i++;}
+  const d=n>=100?0:n>=10?1:2;
+  return String(parseFloat(n.toFixed(d))).replace('.',',')+' '+U[i];
+}
+
+/* ─────────── ЗВУК ─────────── */
+let AC=null;
+function tone(f,d=0.08,type='triangle',v=0.06,delay=0){
+  if(!S.sound)return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const t=AC.currentTime+delay,o=AC.createOscillator(),g=AC.createGain();
+    o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+0.05);}catch(e){}
+}
+function sound(k){
+  if(k==='click')tone(300+Math.random()*130,0.06,'triangle',0.05);
+  else if(k==='buy'){tone(392,0.09);tone(523,0.13,'triangle',0.06,0.07);}
+  else if(k==='gold')[660,880,1175].forEach((f,i)=>tone(f,0.16,'sine',0.07,i*0.08));
+  else if(k==='ach'){tone(523,0.12,'sine',0.07);tone(784,0.22,'sine',0.07,0.1);}
+}
+
+/* ─────────── ТУЛТИП / ТОСТЫ ─────────── */
+const tip=$('tooltip');
+function placeTip(el){
+  const r=el.getBoundingClientRect(),h=tip.offsetHeight,w=tip.offsetWidth;
+  let x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);
+  let y=r.top-h-10; if(y<8)y=r.bottom+10;
+  tip.style.left=x+'px';tip.style.top=y+'px';
+}
+function bindTip(el,fn){
+  el.addEventListener('mouseenter',()=>{tip.innerHTML=fn();tip.classList.add('on');placeTip(el);});
+  el.addEventListener('mouseleave',()=>tip.classList.remove('on'));
+}
+function toast(icon,title,desc,cls=''){
+  const t=document.createElement('div');t.className='toast '+cls;
+  t.innerHTML=`<div class="ti">${icon}</div><div><div class="tt">${title}</div><div class="td">${desc}</div></div>`;
+  $('toasts').appendChild(t);
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),420);},4200);
+}
+
+/* ─────────── МАГАЗИН ─────────── */
+let shopRows=[],lastRev=-1;
+function renderShop(){
+  const list=$('shopList');list.innerHTML='';shopRows=[];
+  let mysteryDone=false;
+  BUILDINGS.forEach((b,i)=>{
+    if(revealed(i)){
+      const el=document.createElement('div');el.className='item';
+      el.innerHTML=`<div class="icon">${b.icon}</div>
+        <div><div class="name">${b.name}<span class="cnt"></span></div><div class="desc"></div></div>
+        <div class="cost"></div>`;
+      el.addEventListener('click',()=>buyBuilding(i));
+      bindTip(el,()=>{
+        const own=S.counts[i];
+        return `<b>${b.icon} ${b.name}</b><br><i>${b.flavor}</i><br>
+        Даёт <b>${fmt(b.prod*globalMult)}/сек</b> за штуку.<br>
+        Куплено: <b>${own}</b> (итого ${fmt(own*b.prod*globalMult)}/сек)<br>
+        Цена за ${S.buyAmt}: <b>🥖 ${fmt(bulkCost(i,S.buyAmt))}</b>`;
+      });
+      list.appendChild(el);
+      shopRows.push({i,el,costEl:el.querySelector('.cost'),cntEl:el.querySelector('.cnt'),descEl:el.querySelector('.desc')});
+    }else if(!mysteryDone){
+      mysteryDone=true;
+      const el=document.createElement('div');el.className='item mystery';
+      el.innerHTML=`<div class="icon">🔒</div>
+        <div><div class="name">???</div><div class="desc">пока секрет пекарни…</div></div>
+        <div class="cost">🥖 ${fmt(b.cost)}</div>`;
+      list.appendChild(el);
+    }
+  });
+  lastRev=BUILDINGS.filter((_,i)=>revealed(i)).length;
+}
+function buyBuilding(i){
+  const cost=bulkCost(i,S.buyAmt);
+  if(S.butter<cost)return;
+  S.butter-=cost;S.counts[i]+=S.buyAmt;
+  recompute();sound('buy');checkAch();updateUI();
+}
+
+/* ─────────── ПЛЮШКИ ─────────── */
+let upTiles=[],lastUpSig='';
+function renderUpgrades(){
+  const grid=$('upGrid');grid.innerHTML='';upTiles=[];
+  let visible=0;
+  UPGRADES.forEach(u=>{
+    if(S.ups.includes(u.id)||!u.need(S))return;
+    visible++;
+    const t=document.createElement('div');t.className='tile';t.textContent=u.icon;
+    t.addEventListener('click',()=>buyUp(u));
+    bindTip(t,()=>`<b>${u.icon} ${u.name}</b><br>${u.desc}<br>Цена: <b>🥖 ${fmt(u.cost)}</b>`);
+    grid.appendChild(t);upTiles.push({el:t,cost:u.cost});
+  });
+  if(!visible)grid.innerHTML='<div class="empty">Печь ещё не открыла все секреты…<br>Продолжайте печь! 🥖</div>';
+  $('upOwned').textContent=S.ups.length;
+  lastUpSig=UPGRADES.filter(u=>!S.ups.includes(u.id)&&u.need(S)).map(u=>u.id).join(',');
+}
+function buyUp(u){
+  if(S.butter<u.cost||S.ups.includes(u.id))return;
+  S.butter-=u.cost;S.ups.push(u.id);
+  recompute();renderUpgrades();sound('buy');
+  toast(u.icon,'Плюшка куплена!',u.name);checkAch();updateUI();
+}
+
+/* ─────────── КЛИК ─────────── */
+const batonBtn=$('baton'),zone=$('batonZone');
+batonBtn.addEventListener('animationend',()=>batonBtn.classList.remove('squish'));
+function doClick(x,y){
+  const p=clickPower();
+  S.butter+=p;S.total+=p;S.clicks++;
+  batonBtn.classList.remove('squish');void batonBtn.offsetWidth;batonBtn.classList.add('squish');
+  // всплывающее число
+  const f=document.createElement('div');f.className='floater';f.textContent='+'+fmt(p);
+  f.style.left=x+'px';f.style.top=y+'px';document.body.appendChild(f);
+  f.animate([{transform:'translate(-50%,-50%)',opacity:1},{transform:'translate(-50%,-160px)',opacity:0}],
+    {duration:800,easing:'ease-out'}).onfinish=()=>f.remove();
+  // крошки
+  const zr=zone.getBoundingClientRect(),cx=x-zr.left,cy=y-zr.top;
+  const cols=['#c98a3e','#e0a852','#a86a24','#f0c070'];
+  for(let k=0;k<7;k++){
+    const c=document.createElement('span');c.className='crumb';
+    c.style.left=cx+'px';c.style.top=cy+'px';c.style.background=cols[Math.random()*cols.length|0];
+    zone.appendChild(c);
+    const dx=(Math.random()-0.5)*190,up=-(30+Math.random()*90),rot=Math.random()*520-260;
+    c.animate([
+      {transform:'translate(0,0) rotate(0deg)',opacity:1},
+      {transform:`translate(${dx*0.6}px,${up}px) rotate(${rot/2}deg)`,opacity:1,offset:0.45},
+      {transform:`translate(${dx}px,${up+170}px) rotate(${rot}deg)`,opacity:0}
+    ],{duration:650+Math.random()*350,easing:'cubic-bezier(.25,.6,.6,1)'}).onfinish=()=>c.remove();
+  }
+  sound('click');
+}
+batonBtn.addEventListener('pointerdown',e=>{e.preventDefault();doClick(e.clientX,e.clientY);});
+addEventListener('keydown',e=>{
+  if(e.code==='Space'&&!e.repeat&&e.target===document.body){
+    e.preventDefault();
+    const r=batonBtn.getBoundingClientRect();
+    doClick(r.left+r.width/2,r.top+r.height/2);
+  }
+});
+
+/* ─────────── ЗОЛОТАЯ ПЛЮШКА ─────────── */
+let goldenTimer=null;
+function scheduleGolden(){
+  clearTimeout(goldenTimer);
+  goldenTimer=setTimeout(spawnGolden,(20+Math.random()*35)*1000/goldenFreq);
+}
+function spawnGolden(){
+  const g=document.createElement('button');g.className='golden';g.textContent='🥐';g.title='Золотая плюшка!';
+  const pad=90;
+  g.style.left=(pad+Math.random()*Math.max(60,innerWidth-pad*2))+'px';
+  g.style.top=(pad+Math.random()*Math.max(60,innerHeight-pad*2)*0.8)+'px';
+  document.body.appendChild(g);
+  const kill=setTimeout(()=>{g.remove();scheduleGolden();},13000);
+  g.addEventListener('pointerdown',e=>{
+    e.stopPropagation();clearTimeout(kill);g.remove();
+    rewardGolden(e.clientX,e.clientY);scheduleGolden();
+  },{once:true});
+}
+function rewardGolden(x,y){
+  S.golden++;sound('gold');
+  const roll=Math.random();let msg;
+  if(roll<0.45){buffs.frenzy=Date.now()+30000;msg='🔥 Безумная выпечка! Производство ×7 на 30 секунд';}
+  else if(roll<0.75){buffs.click=Date.now()+15000;msg='⚡ Масло рук! Клики ×15 на 15 секунд';}
+  else{const gain=Math.max(50,bps()*60,clickPower()*25);S.butter+=gain;S.total+=gain;
+    msg=`🎁 Счастливая крошка! +${fmt(gain)} батонов`;}
+  toast('🥐','Золотая плюшка!',msg);
+  for(let k=0;k<10;k++){
+    const s=document.createElement('span');s.className='spark';s.textContent='✨';
+    s.style.left=x+'px';s.style.top=y+'px';document.body.appendChild(s);
+    const a=Math.random()*Math.PI*2,d=60+Math.random()*90;
+    s.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:`translate(${Math.cos(a)*d-8}px,${Math.sin(a)*d-8}px) scale(.3)`,opacity:0}],
+      {duration:700,easing:'ease-out'}).onfinish=()=>s.remove();
+  }
+  checkAch();
+}
+
+/* ─────────── ДОСТИЖЕНИЯ ─────────── */
+function checkAch(){
+  ACHS.forEach(a=>{
+    if(S.ach.includes(a.id)||!a.test())return;
+    S.ach.push(a.id);sound('ach');
+    toast(a.icon,'Достижение: '+a.name,a.desc,'ach');
+  });
+  $('achCnt').textContent=S.ach.length;
+}
+
+/* ─────────── UI ─────────── */
+function updateUI(){
+  $('cnt').textContent=fmt(Math.floor(S.butter));
+  $('rateLine').innerHTML=`🧈 ${fmt(bps())} в секунду · 👆 ${fmt(clickPower())} за клик`;
+  const now=Date.now();let chips='';
+  if(now<buffs.frenzy)chips+=`<span class="chip">🔥 выпечка ×7 <b>${Math.ceil((buffs.frenzy-now)/1000)}с</b></span>`;
+  if(now<buffs.click)chips+=`<span class="chip">⚡ клик ×15 <b>${Math.ceil((buffs.click-now)/1000)}с</b></span>`;
+  $('buffs').innerHTML=chips;
+  zone.classList.toggle('bps-on',bps()>0);
+
+  const rev=BUILDINGS.filter((_,i)=>revealed(i)).length;
+  if(rev!==lastRev)renderShop();
+  shopRows.forEach(r=>{
+    const b=BUILDINGS[r.i],cost=bulkCost(r.i,S.buyAmt);
+    r.costEl.textContent='🥖 '+fmt(cost);
+    r.el.classList.toggle('can',S.butter>=cost);
+    r.cntEl.textContent=S.counts[r.i]>0?'×'+S.counts[r.i]:'';
+    r.descEl.textContent='+'+fmt(b.prod*globalMult)+'/сек за штуку';
+  });
+  upTiles.forEach(t=>t.el.classList.toggle('can',S.butter>=t.cost));
+  const sig=UPGRADES.filter(u=>!S.ups.includes(u.id)&&u.need(S)).map(u=>u.id).join(',');
+  if(sig!==lastUpSig)renderUpgrades();
+
+  $('stTotal').textContent=fmt(S.total);
+  $('stClicks').textContent=fmt(S.clicks);
+  $('stGold').textContent=S.golden;
+}
+
+/* ─────────── ВКЛАДКИ / КНОПКИ ─────────── */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  $('paneProd').classList.toggle('hidden',t.dataset.p!=='prod');
+  $('paneUps').classList.toggle('hidden',t.dataset.p!=='ups');
+}));
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  S.buyAmt=+b.dataset.amt;
+  document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('active',x===b));
+}));
+$('sndBtn').addEventListener('click',()=>{S.sound=!S.sound;$('sndBtn').textContent=S.sound?'🔊':'🔇';});
+$('saveBtn').addEventListener('click',()=>save(true));
+$('wipeBtn').addEventListener('click',()=>{
+  if(confirm('Точно сбросить весь прогресс? Батоны не вернуть!')){
+    localStorage.removeItem(KEY);location.reload();
+  }
+});
+
+/* ─────────── СОХРАНЕНИЕ ─────────── */
+function save(manual){
+  S.last=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  const d=$('saveDot');d.classList.add('on');setTimeout(()=>d.classList.remove('on'),900);
+  if(manual)toast('💾','Сохранено','Прогресс в безопасности.');
+}
+setInterval(save,15000);
+addEventListener('beforeunload',()=>save());
+
+/* ─────────── ФОН / ТИКЕР ─────────── */
+for(let i=0;i<26;i++){
+  const p=document.createElement('span');p.className='fl';
+  const s=2+Math.random()*5;
+  p.style.width=p.style.height=s+'px';
+  p.style.left=Math.random()*100+'vw';
+  p.style.setProperty('--sw',(Math.random()*60-30)+'px');
+  p.style.animationDuration=(14+Math.random()*20)+'s';
+  p.style.animationDelay=(-Math.random()*30)+'s';
+  document.body.appendChild(p);
+}
+let newsI=0;
+setInterval(()=>{
+  const el=$('news');el.style.opacity=0;
+  setTimeout(()=>{newsI=(newsI+1)%NEWS.length;el.textContent=NEWS[newsI];el.style.opacity=1;},420);
+},8000);
+
+/* ─────────── ИГРОВОЙ ЦИКЛ ─────────── */
+let prev=performance.now();
+setInterval(()=>{
+  const t=performance.now(),dt=Math.min((t-prev)/1000,1);prev=t;
+  const gain=bps()*dt;
+  if(gain>0){S.butter+=gain;S.total+=gain;}
+  updateUI();
+},100);
+setInterval(checkAch,500);
+
+/* ─────────── СТАРТ ─────────── */
+$('achTot').textContent=ACHS.length;
+$('sndBtn').textContent=S.sound?'🔊':'🔇';
+document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('active',+x.dataset.amt===S.buyAmt));
+recompute();
+// офлайн-доход
+(()=>{
+  const away=(Date.now()-S.last)/1000;
+  if(away>30&&baseBps>0){
+    const gain=baseBps*Math.min(away,8*3600)*0.6;
+    if(gain>=1){S.butter+=gain;S.total+=gain;
+      setTimeout(()=>toast('🌙','Пока вас не было…',`Пекарня испекла ещё ${fmt(gain)} батонов!`),600);}
+  }
+})();
+renderShop();renderUpgrades();updateUI();checkAch();scheduleGolden();
+</script>
+</body>
+</html>

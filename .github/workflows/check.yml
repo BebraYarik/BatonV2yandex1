@@ -1,0 +1,35 @@
+name: Game checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  game:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run balance
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Browser checks against the release archive
+        run: |
+          SERVE_DIR=dist/game npm run dev > /tmp/baton-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          CHROMIUM_PATH="$(node --input-type=module -e 'import {chromium} from "playwright"; console.log(chromium.executablePath())')" npm run test:browser
+      - uses: actions/upload-artifact@v4
+        with:
+          name: baton-yandex-release
+          path: |
+            dist/baton-yandex-release.zip
+            dist/sha256.txt

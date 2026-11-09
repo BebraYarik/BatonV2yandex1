@@ -1,0 +1,21 @@
+{
+  "name": "baton-bread-empire",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/serve.js",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node tests/browser.js",
+    "balance": "node tools/balance.js",
+    "build": "python3 tools/build.py",
+    "format:check": "prettier --check index.html css/*.css js/*.js tools/*.js tests/*.js",
+    "media": "node tools/media.js",
+    "test:soak": "node tests/soak.js",
+    "test:visual": "node tests/visual.js"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "prettier": "3.6.2"
+  }
+}

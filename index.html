@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#241409" />
+    <title>Батон: хлебная империя</title>
+    <link rel="icon" href="assets/baton.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">🥖</span>
+          <div>
+            <h1 data-i18n="title">Батон: хлебная империя</h1>
+            <p data-i18n="tagline">Один батон. Бесконечные возможности.</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button
+            id="achievement-shortcut"
+            class="quiet"
+            aria-label="Достижения"
+          >
+            🏆 <span id="achievement-count">0 / 42</span></button
+          ><button id="sound" class="icon-button" aria-label="Звук">🔊</button
+          ><button id="settings" class="icon-button" aria-label="Настройки">
+            ⚙
+          </button>
+        </div>
+      </header>
+      <main>
+        <section class="bakery panel" aria-label="Пекарня">
+          <div class="stage-label" id="stage"></div>
+          <div class="balance-label" data-i18n="balance">БАТОНОВ</div>
+          <div id="balance">0</div>
+          <div class="rates">
+            <span
+              ><b id="bps">0</b>
+              <span data-i18n="perSecond">в секунду</span></span
+            ><span class="rate-divider">·</span
+            ><span
+              ><b id="click-power">1</b>
+              <span data-i18n="perClick">за клик</span></span
+            >
+          </div>
+          <div id="buffs" class="buffs"></div>
+          <div class="baton-zone" id="baton-zone">
+            <div class="rays"></div>
+            <div class="orbit orbit-a"></div>
+            <div class="orbit orbit-b"></div>
+            <span class="crumb-decoration crumb-a">✦</span
+            ><span class="crumb-decoration crumb-b">✧</span>
+            <button
+              id="baton"
+              class="loaf classic"
+              type="button"
+              aria-label="Испечь батон"
+            >
+              <img src="assets/baton.svg" alt="" draggable="false" />
+            </button>
+            <button
+              id="golden"
+              class="golden"
+              type="button"
+              hidden
+              aria-label="Поймать золотую плюшку"
+            >
+              <span class="golden-art" aria-hidden="true">🥐</span>
+            </button>
+          </div>
+          <p id="first-hint" data-i18n="hint">
+            Нажимай на батон → купи первую ложку
+          </p>
+          <div id="event" class="event" hidden></div>
+          <div class="news">
+            <span class="news-dot"></span>
+            <p id="news"></p>
+          </div>
+          <div class="bakery-footer">
+            <span id="save-status"></span
+            ><button id="manual-save" class="text-button" data-i18n="save">
+              Сохранить
+            </button>
+          </div>
+        </section>
+        <aside class="workshop panel">
+          <nav class="tabs" aria-label="Разделы игры">
+            <button class="tab active" data-tab="production">
+              <span>🏭</span><small data-i18n="production">Производство</small>
+            </button>
+            <button class="tab" data-tab="upgrades">
+              <span>✨</span><small data-i18n="upgrades">Улучшения</small>
+            </button>
+            <button class="tab" data-tab="prestige">
+              <span>🌀</span><small data-i18n="prestige">Новый замес</small>
+            </button>
+            <button class="tab" data-tab="achievements">
+              <span>🏆</span><small data-i18n="achievements">Достижения</small>
+            </button>
+            <button class="tab" data-tab="quests">
+              <span>📋</span><small data-i18n="quests">Заказы</small>
+            </button>
+          </nav>
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">BAKERY & CO.</span>
+              <h2 id="section-title"></h2>
+            </div>
+            <span id="section-count" class="count-badge"></span>
+          </div>
+          <div id="section-tools"></div>
+          <div id="content" class="content" tabindex="0"></div>
+          <div class="ad-area">
+            <button id="reward-ad" class="ad-button" data-i18n="watchAd">
+              Смотреть рекламу → ×2 BPS на 3 минуты</button
+            ><small data-i18n="adHint"
+              >Необязательный бонус, выдаётся после просмотра.</small
+            >
+          </div>
+        </aside>
+      </main>
+    </div>
+    <div id="toasts" role="status" aria-live="polite"></div>
+    <div id="pause-overlay" class="pause-overlay" hidden>
+      <div class="panel">
+        <span>☕</span>
+        <h2 data-i18n="paused">Пекарня на паузе</h2>
+        <p data-i18n="pauseHelp">Вернись в игру, чтобы продолжить выпечку.</p>
+        <button id="resume" class="primary" data-i18n="resume">
+          Продолжить
+        </button>
+      </div>
+    </div>
+    <dialog id="dialog">
+      <div class="dialog-head">
+        <h2 id="dialog-title"></h2>
+        <button id="dialog-close" class="icon-button" aria-label="Закрыть">
+          ✕
+        </button>
+      </div>
+      <div id="dialog-body"></div>
+      <div id="dialog-actions"></div>
+    </dialog>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
